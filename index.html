@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>IMD Station Master Pro</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body data-theme="light">
+    <div class="app-container">
+        <div class="header">
+            <h2>IMD Station Master</h2>
+            <button class="theme-toggle" onclick="toggleTheme()">🌓 Theme</button>
+        </div>
+
+        <div class="section-container">
+    <div class="section-title">Temperature Section</div>
+    <div class="grid">
+        <div class="field">
+            <label>Dry Bulb (°C)</label>
+            <input type="number" id="T_db" step="0.1" value="28.8" oninput="solveAll()">
+        </div>
+        <div class="field">
+            <label>Wet Bulb (°C)</label>
+            <input type="number" id="T_wb" step="0.1" value="19.6" oninput="solveAll()">
+        </div>
+    </div>
+    <div class="results-card">
+        <div class="res-row"><span>Dew Point (DP):</span> <span class="val" id="res-dp">--</span></div>
+        <div class="res-row"><span>Humidity (RH):</span> <span class="val" id="res-rh">--</span></div>
+        <div class="res-row"><span>Vapour Pressure (VP):</span> <span class="val" id="res-vp">--</span></div>
+    </div>
+</div>
+
+<div class="section-container">
+    <div class="section-title">Pressure Section</div>
+    <div class="field">
+        <label>Bar Temperature (K)</label>
+        <input type="number" id="barT" step="0.1" value="292.5" oninput="solveAll()">
+    </div>
+    <div class="grid">
+        <div class="field">
+            <label>Station Level (SLP)</label>
+            <input type="number" id="targetSLP" step="0.1" value="960.0" oninput="solveAll()">
+        </div>
+        <div class="field">
+            <label>Inst. Correction (C)</label>
+            <input type="number" id="instrC" step="0.1" value="-0.3" oninput="solveAll()">
+        </div>
+    </div>
+    <div class="results-card highlight-box">
+        <div class="res-row"><span>Table I Corr (Bar T):</span> <span class="val" id="res-table1">--</span></div>
+        <div class="res-row"><span>Table II Corr (Dry B):</span> <span class="val" id="res-table2">--</span></div>
+        <div class="res-row"><span>Instrument Reading (P):</span> <span class="val" id="res-instr-reading">--</span></div>
+        <div class="res-row main-result">
+            <span>Sea Level (MSLP):</span> 
+            <span class="val" id="res-mslp">--</span>
+        </div>
+    </div>
+</div>
+
+        <button class="btn-primary" onclick="copyAll()">Copy All Data</button>
+    </div>
+    <script src="data.js"></script>
+    <script src="logic.js"></script>
+</body>
+</html>
