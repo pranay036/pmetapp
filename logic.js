@@ -29,20 +29,21 @@ function solveTemperature() {
 function solvePressure() {
     const tK = parseFloat(document.getElementById('barT').value);
     const slp = parseFloat(document.getElementById('targetSLP').value);
+    const prevSlp = parseFloat(document.getElementById('prevSLP').value);
     const dbTemp = parseFloat(document.getElementById('T_db').value);
-    // FIXED: Ensure instC defaults to 0 so it doesn't break the auto-calc
-    const rawC = document.getElementById('instrC').value;
-    const instC = rawC === "" ? 0 : parseFloat(rawC);
+    const instC = parseFloat(document.getElementById('instrC').value) || 0;
 
-    if (isNaN(tK) || isNaN(slp)) {
-        document.getElementById('res-table1').innerText = "--";
-        document.getElementById('res-table2').innerText = "--";
-        document.getElementById('res-instr-reading').innerText = "--";
-        document.getElementById('res-mslp').innerText = "--";
-        return;
+    if (isNaN(tK) || isNaN(slp)) return;
+
+    // 1. P24 Calculation
+    if (!isNaN(prevSlp)) {
+        const diff = slp - prevSlp;
+        document.getElementById('res-p24').innerText = (diff >= 0 ? "+" : "") + diff.toFixed(1) + " hPa";
+    } else {
+        document.getElementById('res-p24').innerText = "--";
     }
 
-    // 1. Table I (Barometer Correction)
+    // 2. Table I (Barometer Correction)
     const roundedT = (Math.round(tK * 2) / 2).toFixed(1);
     const colIdxI = slp <= 930 ? 0 : slp <= 950 ? 1 : slp <= 970 ? 2 : slp <= 990 ? 3 : 4;
     const entryI = barTable[roundedT];
@@ -57,13 +58,12 @@ function solvePressure() {
         document.getElementById('res-instr-reading').innerText = readingP.toFixed(1) + " hPa";
     }
 
-    // 2. Table II (Dry Bulb Correction)
+    // 3. Table II (MSLP Reduction)
     if (!isNaN(dbTemp)) {
         const rowKey = Object.keys(dryBulbTable).find(k => {
             const [min, max] = k.split('-').map(Number);
             return dbTemp >= min && dbTemp <= max;
         });
-
         const colIdxII = Math.round((slp - 930) / 2);
         const entryII = dryBulbTable[rowKey];
 
@@ -71,28 +71,21 @@ function solvePressure() {
             const t2Corr = entryII[colIdxII];
             document.getElementById('res-table2').innerText = "+" + t2Corr.toFixed(1);
             document.getElementById('res-mslp').innerText = (slp + t2Corr).toFixed(1) + " hPa";
-        } else {
-            document.getElementById('res-table2').innerText = "N/A";
-            document.getElementById('res-mslp').innerText = "Out of Range";
         }
     }
 }
 
+// Fixed Theme Toggle logic
 function toggleTheme() {
     const body = document.body;
-    const currentTheme = body.getAttribute('data-theme');
-    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-    
-    body.setAttribute('data-theme', newTheme);
-    
-    // Optional: Save preference to local storage for mobile use
-    localStorage.setItem('theme', newTheme);
+    const current = body.getAttribute('data-theme');
+    const target = current === 'dark' ? 'light' : 'dark';
+    body.setAttribute('data-theme', target);
+    localStorage.setItem('theme', target);
 }
 
-// Add this to your window.onload to load the saved theme
 window.onload = () => {
     const savedTheme = localStorage.getItem('theme') || 'light';
     document.body.setAttribute('data-theme', savedTheme);
-    solveTemperature(); 
-    solvePressure(); 
+    solveAll();
 };
