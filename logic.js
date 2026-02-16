@@ -78,4 +78,21 @@ function solvePressure() {
     }
 }
 
-window.onload = solveAll;
+function toggleTheme() {
+    const body = document.body;
+    const currentTheme = body.getAttribute('data-theme');
+    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    
+    body.setAttribute('data-theme', newTheme);
+    
+    // Optional: Save preference to local storage for mobile use
+    localStorage.setItem('theme', newTheme);
+}
+
+// Add this to your window.onload to load the saved theme
+window.onload = () => {
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    document.body.setAttribute('data-theme', savedTheme);
+    solveTemperature(); 
+    solvePressure(); 
+};
