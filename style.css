@@ -9,6 +9,7 @@ body { font-family: -apple-system, sans-serif; background-color: var(--bg); colo
 .section-title { font-size: 0.75rem; font-weight: 800; color: var(--primary); text-transform: uppercase; margin-bottom: 12px; border-bottom: 1px solid var(--border); padding-bottom: 6px; }
 .grid { display: flex; gap: 12px; }
 .field { margin-bottom: 14px; flex: 1; }
+.rain-03z-specific { display: none; }
 label { display: block; font-size: 0.7rem; text-transform: uppercase; color: #8E8E93; font-weight: 700; margin-bottom: 5px; }
 input { width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 12px; background: var(--field); color: var(--text); font-size: 1rem; }
 .results-card { background: var(--field); border-radius: 16px; padding: 16px; border: 1px solid var(--border); }
@@ -16,4 +17,8 @@ input { width: 100%; padding: 12px; border: 1px solid var(--border); border-radi
 .res-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.95rem; }
 .main-result { border-top: 1px dashed var(--border); margin-top: 10px; padding-top: 10px; }
 .val { font-weight: 800; color: var(--primary); }
+.wind-table { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; text-align: center; }
+.wind-header { font-size: 0.6rem; font-weight: 700; color: #8E8E93; text-transform: uppercase; margin-bottom: 4px; line-height: 1.1; }
+.wind-val { font-size: 1.1rem; font-weight: 800; color: var(--primary); }
+.wind-unit { font-size: 0.6rem; color: #8E8E93; margin-bottom: 8px; }
 .btn-primary { width: 100%; padding: 16px; background: var(--primary); color: white; border: none; border-radius: 14px; font-weight: 600; cursor: pointer; }

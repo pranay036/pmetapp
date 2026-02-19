@@ -1,6 +1,44 @@
 function solveAll() {
     solveTemperature();
     solvePressure();
+    solveRain();
+    solveWind();
+}
+
+function solveWind() {
+    const currRaw = parseFloat(document.getElementById('windCurrent').value);
+    const prevRaw = parseFloat(document.getElementById('windPrevious').value);
+
+    if (isNaN(currRaw) || isNaN(prevRaw)) {
+        ['0817', '1708', '0808'].forEach(suffix => {
+            document.getElementById(`w-kmph-${suffix}`).innerText = "--";
+            document.getElementById(`w-kt-${suffix}`).innerText = "--";
+        });
+        return;
+    }
+
+    // Last digit is decimal
+    const current = currRaw / 10;
+    const previous = prevRaw / 10;
+    
+    // Handle rollover (assuming 5 digit anemometer e.g. 9999.9)
+    let diff = current - previous;
+    if (diff < 0) {
+        diff += 10000; // Adjust based on common anemometer limits if needed
+    }
+
+    const findVal = (table, diff, rangeKey) => {
+        const entry = table.find(row => diff >= row[rangeKey][0] && diff <= row[rangeKey][1]);
+        return entry ? entry.v : "--";
+    };
+
+    document.getElementById('w-kmph-0817').innerText = findVal(windKmphTable, diff, 'r0817');
+    document.getElementById('w-kmph-1708').innerText = findVal(windKmphTable, diff, 'r1708');
+    document.getElementById('w-kmph-0808').innerText = findVal(windKmphTable, diff, 'r0808');
+
+    document.getElementById('w-kt-0817').innerText = findVal(windKtTable, diff, 'r0817');
+    document.getElementById('w-kt-1708').innerText = findVal(windKtTable, diff, 'r1708');
+    document.getElementById('w-kt-0808').innerText = findVal(windKtTable, diff, 'r0808');
 }
 
 function solveTemperature() {
@@ -75,6 +113,26 @@ function solvePressure() {
     }
 }
 
+function solveRain() {
+    const selectedUTC = document.getElementById('synopUTC').value;
+    const rain03zFields = document.querySelectorAll('.rain-03z-specific');
+
+    if (selectedUTC === '03') {
+        rain03zFields.forEach(field => field.style.display = 'grid');
+    } else {
+        rain03zFields.forEach(field => field.style.display = 'none');
+    }
+    
+    // Retrieve values (even if hidden, for completeness)
+    const rainSinceLast = parseFloat(document.getElementById('rainSinceLast').value);
+    const rainTotal = parseFloat(document.getElementById('rainTotal').value);
+    const rain24hr = parseFloat(document.getElementById('rain24hr').value);
+    const seasonalRainfall = parseFloat(document.getElementById('seasonalRainfall').value);
+
+    // No calculations specified yet, just ensuring values are accessible.
+    // console.log(`Rain Since Last: ${rainSinceLast}, Total Rain: ${rainTotal}, R24: ${rain24hr}, SRF: ${seasonalRainfall}`);
+}
+
 // Fixed Theme Toggle logic
 function toggleTheme() {
     const body = document.body;
@@ -84,8 +142,32 @@ function toggleTheme() {
     localStorage.setItem('theme', target);
 }
 
+function setUpcomingUTC() {
+    const now = new Date();
+    const currentHour = now.getUTCHours();
+    
+    // Synoptic hours: 0, 3, 6, 9, 12, 15, 18, 21
+    // The "upcoming" UTC is the next one in the sequence.
+    // If it's 10 UTC, next is 12 UTC. If it's 22 UTC, next is 00 UTC.
+    
+    const synopHours = [0, 3, 6, 9, 12, 15, 18, 21];
+    let upcoming = synopHours[0];
+    
+    for (let hour of synopHours) {
+        if (hour > currentHour) {
+            upcoming = hour;
+            break;
+        }
+    }
+    
+    // Pad with leading zero for the value attribute
+    const val = upcoming.toString().padStart(2, '0');
+    document.getElementById('synopUTC').value = val;
+}
+
 window.onload = () => {
     const savedTheme = localStorage.getItem('theme') || 'light';
     document.body.setAttribute('data-theme', savedTheme);
+    setUpcomingUTC();
     solveAll();
 };
