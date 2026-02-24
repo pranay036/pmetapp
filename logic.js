@@ -1,3 +1,5 @@
+let zczcSequence = null;
+
 function solveAll() {
     solveTemperature();
     solvePressure();
@@ -115,10 +117,10 @@ function updateConditionalSections() {
 }
 
 function onWindDirectionChange() {
-    const dd = document.getElementById('windDD').value;
+    const ddWind = document.getElementById('windDD').value;
     const wsEl = document.getElementById('windWS');
 
-    if (dd === '00') {
+    if (ddWind === '00') {
         wsEl.value = '0';
         wsEl.setAttribute('readonly', 'readonly');
     } else {
@@ -340,9 +342,8 @@ function rainCodeFromTenthsMm(mmTenthsRaw) {
 
 function buildSynop() {
     const utc = document.getElementById('utcSlot').value;
-    const now = new Date();
-
-    const yy = pad2(now.getUTCDate());
+    const selectedDate = getSelectedObsDate();
+    const yy = pad2(selectedDate.getDate());
     const gg = utc;
 
     const station = '42542';
@@ -356,7 +357,7 @@ function buildSynop() {
     const vv = document.getElementById('res-vv').innerText === '--' ? '//' : document.getElementById('res-vv').innerText;
 
     const nc = clampCodeValue('cloudNc');
-    const dd = document.getElementById('windDD').value;
+    const ddWind = document.getElementById('windDD').value;
     const ws = Math.max(0, Math.min(99, Math.round(parseFloat(document.getElementById('windWS').value) || 0)));
 
     const t = parseFloat(document.getElementById('T_db').value);
@@ -385,7 +386,7 @@ function buildSynop() {
     lines.push(yy + gg + '4');
     lines.push(station);
     lines.push(ir + ix + hc + vv);
-    lines.push(String(nc) + dd + pad2(ws));
+    lines.push(String(nc) + ddWind + pad2(ws));
 
     const tGroup = tempGroup('1', t);
     const tdGroup = tempGroup('2', dp);
@@ -446,7 +447,20 @@ function buildSynop() {
         }
     }
 
-    document.getElementById('synopOutput').innerText = lines.join('\n');
+    const synopMessage = lines.join(' ');
+    const mFlag = ['00', '06', '12', '18'].includes(utc) ? 'M' : 'I';
+    const obsDay = pad2(selectedDate.getDate());
+    const hh = utc;
+    const sequence = zczcSequence === null ? createZczcSequence() : zczcSequence;
+
+    const fullMessage = [
+        'ZCZC 0' + sequence,
+        'S' + mFlag + 'IN90 VIJP ' + obsDay + hh + '00',
+        synopMessage + ' =',
+        'NNNN'
+    ].join('\n');
+
+    document.getElementById('synopOutput').innerText = fullMessage;
 }
 
 function clampCodeValue(id) {
@@ -510,6 +524,27 @@ function nextUtcSlot() {
     return pad2(next);
 }
 
+function createZczcSequence() {
+    return pad2(Math.floor(Math.random() * 31) + 10);
+}
+
+function getTodayInputDate() {
+    const now = new Date();
+    const y = now.getFullYear();
+    const m = String(now.getMonth() + 1).padStart(2, '0');
+    const d = String(now.getDate()).padStart(2, '0');
+    return y + '-' + m + '-' + d;
+}
+
+function getSelectedObsDate() {
+    const raw = document.getElementById('obsDate').value;
+    if (!raw) {
+        return new Date();
+    }
+    const [y, m, d] = raw.split('-').map(Number);
+    return new Date(y, m - 1, d);
+}
+
 function copyAll() {
     const out = document.getElementById('synopOutput').innerText;
     const onCopied = () => {
@@ -535,12 +570,21 @@ function copyAll() {
     onCopied();
 }
 
-function toggleTheme() {
+function toggleTheme(themeValue) {
     const body = document.body;
     const current = body.getAttribute('data-theme');
-    const target = current === 'dark' ? 'light' : 'dark';
+    const target = themeValue || (current === 'dark' ? 'light' : 'dark');
     body.setAttribute('data-theme', target);
     localStorage.setItem('theme', target);
+    updateThemeSwitchUI(target);
+}
+
+function updateThemeSwitchUI(theme) {
+    const isDark = theme === 'dark';
+    const switchEl = document.getElementById('themeSwitch');
+    const labelEl = document.getElementById('themeLabel');
+    switchEl.checked = isDark;
+    labelEl.innerText = isDark ? 'Dark' : 'Light';
 }
 
 window.onload = () => {
@@ -553,10 +597,13 @@ window.onload = () => {
     fillSelect('weatherW1', pastWeatherOptions, '0');
     fillSelect('weatherW2', pastWeatherOptions, '0');
 
+    zczcSequence = createZczcSequence();
+    document.getElementById('obsDate').value = getTodayInputDate();
     document.getElementById('utcSlot').value = nextUtcSlot();
     onWindDirectionChange();
 
     const savedTheme = localStorage.getItem('theme') || 'light';
     document.body.setAttribute('data-theme', savedTheme);
+    updateThemeSwitchUI(savedTheme);
     solveAll();
 };

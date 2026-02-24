@@ -11,23 +11,35 @@
     <div class="app-container">
         <div class="header">
             <h2>SYNOP Creator - DABOK</h2>
-            <button class="theme-toggle" onclick="toggleTheme()">Theme</button>
+            <div class="theme-switch-wrap">
+                <span id="themeLabel">Light</span>
+                <label class="theme-switch" aria-label="Theme switch">
+                    <input type="checkbox" id="themeSwitch" onchange="toggleTheme(this.checked ? 'dark' : 'light')">
+                    <span class="theme-slider"></span>
+                </label>
+            </div>
         </div>
 
         <div class="section-container">
             <div class="section-title">Observation Time</div>
-            <div class="field">
-                <label>UTC (Z) Slot</label>
-                <select id="utcSlot" onchange="solveAll()">
-                    <option value="00">00z</option>
-                    <option value="03">03z</option>
-                    <option value="06">06z</option>
-                    <option value="09">09z</option>
-                    <option value="12">12z</option>
-                    <option value="15">15z</option>
-                    <option value="18">18z</option>
-                    <option value="21">21z</option>
-                </select>
+            <div class="grid">
+                <div class="field">
+                    <label>Date</label>
+                    <input type="date" id="obsDate" onchange="solveAll()">
+                </div>
+                <div class="field">
+                    <label>UTC (Z) Slot</label>
+                    <select id="utcSlot" onchange="solveAll()">
+                        <option value="00">00z</option>
+                        <option value="03">03z</option>
+                        <option value="06">06z</option>
+                        <option value="09">09z</option>
+                        <option value="12">12z</option>
+                        <option value="15">15z</option>
+                        <option value="18">18z</option>
+                        <option value="21">21z</option>
+                    </select>
+                </div>
             </div>
         </div>
 
