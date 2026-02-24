@@ -431,19 +431,14 @@ function buildSynop() {
     if (utc === '03') {
         const rtotRawTenths = parseFloat(document.getElementById('rainRtot').value);
         const srfRaw = parseFloat(document.getElementById('rainSRF').value);
-        const section555 = [];
+        lines.push('555');
 
-        if (!isNaN(rtotRawTenths)) {
-            section555.push('0' + pad4(Math.round(Math.abs(rtotRawTenths))));
+        if (!isNaN(rtotRawTenths) && rtotRawTenths > 0) {
+            lines.push('0' + pad4(Math.round(Math.abs(rtotRawTenths))));
         }
 
         if (!isNaN(srfRaw)) {
-            section555.push('1' + pad4(Math.round(Math.abs(srfRaw))));
-        }
-
-        if (section555.length > 0) {
-            lines.push('555');
-            section555.forEach((g) => lines.push(g));
+            lines.push('1' + pad4(Math.round(Math.abs(srfRaw))));
         }
     }
 
