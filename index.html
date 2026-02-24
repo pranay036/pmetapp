@@ -3,70 +3,255 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>IMD Station Master Pro</title>
+    <title>SYNOP Creator</title>
     <link rel="manifest" href="manifest.json">
     <link rel="stylesheet" href="style.css">
 </head>
 <body data-theme="light">
     <div class="app-container">
         <div class="header">
-            <h2>Pranay MET App</h2>
-            <button class="theme-toggle" onclick="toggleTheme()">🌓 Theme</button>
+            <h2>SYNOP Creator - DABOK</h2>
+            <button class="theme-toggle" onclick="toggleTheme()">Theme</button>
         </div>
 
         <div class="section-container">
-    <div class="section-title">Temperature Section</div>
-    <div class="grid">
-        <div class="field">
-            <label>Dry Bulb (°C)</label>
-            <input type="number" id="T_db" step="0.1" value="28.8" oninput="solveAll()">
+            <div class="section-title">Observation Time</div>
+            <div class="field">
+                <label>UTC (Z) Slot</label>
+                <select id="utcSlot" onchange="solveAll()">
+                    <option value="00">00z</option>
+                    <option value="03">03z</option>
+                    <option value="06">06z</option>
+                    <option value="09">09z</option>
+                    <option value="12">12z</option>
+                    <option value="15">15z</option>
+                    <option value="18">18z</option>
+                    <option value="21">21z</option>
+                </select>
+            </div>
         </div>
-        <div class="field">
-            <label>Wet Bulb (°C)</label>
-            <input type="number" id="T_wb" step="0.1" value="19.6" oninput="solveAll()">
-        </div>
-    </div>
-    <div class="results-card">
-        <div class="res-row"><span>Dew Point (DP):</span> <span class="val" id="res-dp">--</span></div>
-        <div class="res-row"><span>Humidity (RH):</span> <span class="val" id="res-rh">--</span></div>
-        <div class="res-row"><span>Vapour Pressure (VP):</span> <span class="val" id="res-vp">--</span></div>
-    </div>
-</div>
 
-<div class="section-container">
-    <div class="section-title">Pressure & Sea Level</div>
-    <div class="field">
-        <label>Bar Temperature (K)</label>
-        <input type="number" id="barT" step="0.1" value="292.5" oninput="solveAll()">
-    </div>
-    <div class="grid">
-        <div class="field">
-            <label>Station Level (SLP)</label>
-            <input type="number" id="targetSLP" step="0.1" value="960.0" oninput="solveAll()">
+        <div class="section-container">
+            <div class="section-title">Temperature Section</div>
+            <div class="grid">
+                <div class="field">
+                    <label>Dry Bulb (deg C)</label>
+                    <input type="number" id="T_db" step="0.1" value="28.8" oninput="solveAll()">
+                </div>
+                <div class="field">
+                    <label>Wet Bulb (deg C)</label>
+                    <input type="number" id="T_wb" step="0.1" value="19.6" oninput="solveAll()">
+                </div>
+            </div>
+            <div class="grid">
+                <div class="field" id="temp-tmax-field">
+                    <label>Tmax (deg C)</label>
+                    <input type="number" id="tMax" step="0.1" value="31.2" oninput="solveAll()">
+                </div>
+                <div class="field" id="temp-tmin-field">
+                    <label>Tmin (deg C)</label>
+                    <input type="number" id="tMin" step="0.1" value="21.4" oninput="solveAll()">
+                </div>
+            </div>
+            <div class="results-card">
+                <div class="res-row"><span>Dew Point (DP):</span> <span class="val" id="res-dp">--</span></div>
+                <div class="res-row"><span>Humidity (RH):</span> <span class="val" id="res-rh">--</span></div>
+                <div class="res-row"><span>Vapour Pressure (VP):</span> <span class="val" id="res-vp">--</span></div>
+            </div>
         </div>
-        <div class="field">
-            <label>Prev. Day SLP</label>
-            <input type="number" id="prevSLP" step="0.1" placeholder="Enter Yesterday" oninput="solveAll()">
-        </div>
-    </div>
-    <div class="field">
-        <label>Inst. Correction (C)</label>
-        <input type="number" id="instrC" step="0.1" value="-0.3" oninput="solveAll()">
-    </div>
-    
-    <div class="results-card highlight-box">
-        <div class="res-row"><span>Table I Corr (Bar T):</span> <span class="val" id="res-table1">--</span></div>
-        <div class="res-row"><span>Table II Corr (Dry B):</span> <span class="val" id="res-table2">--</span></div>
-        <div class="res-row"><span>Instrument Reading (P):</span> <span class="val" id="res-instr-reading">--</span></div>
-        <div class="res-row"><span>Sea Level (MSLP):</span> <span class="val" id="res-mslp">--</span></div>
-        <div class="res-row main-result">
-            <span>24h SLP Diff (P24):</span> 
-            <span class="val" id="res-p24">--</span>
-        </div>
-    </div>
-</div>
 
-        <button class="btn-primary" onclick="copyAll()">Copy All Data</button>
+        <div class="section-container">
+            <div class="section-title">Pressure & Sea Level</div>
+            <div class="field">
+                <label>Bar Temperature (K)</label>
+                <input type="number" id="barT" step="0.1" value="292.5" oninput="solveAll()">
+            </div>
+            <div class="grid">
+                <div class="field">
+                    <label>Station Level (SLP)</label>
+                    <input type="number" id="targetSLP" step="0.1" value="960.0" oninput="solveAll()">
+                </div>
+                <div class="field">
+                    <label>Prev. Day SLP</label>
+                    <input type="number" id="prevSLP" step="0.1" placeholder="Enter Yesterday" oninput="solveAll()">
+                </div>
+            </div>
+            <div class="field">
+                <label>Inst. Correction (C)</label>
+                <input type="number" id="instrC" step="0.1" value="-0.3" oninput="solveAll()">
+            </div>
+
+            <div class="results-card highlight-box">
+                <div class="res-row"><span>Table I Corr (Bar T):</span> <span class="val" id="res-table1">--</span></div>
+                <div class="res-row"><span>Table II Corr (Dry B):</span> <span class="val" id="res-table2">--</span></div>
+                <div class="res-row"><span>Instrument Reading (P):</span> <span class="val" id="res-instr-reading">--</span></div>
+                <div class="res-row"><span>Sea Level (MSLP):</span> <span class="val" id="res-mslp">--</span></div>
+                <div class="res-row main-result">
+                    <span>24h SLP Diff (P24):</span>
+                    <span class="val" id="res-p24">--</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-container">
+            <div class="section-title">Wind Section</div>
+            <div class="grid">
+                <div class="field">
+                    <label>Wind Direction (DD)</label>
+                    <select id="windDD" onchange="onWindDirectionChange(); solveAll()"></select>
+                </div>
+                <div class="field">
+                    <label>Wind Speed (WS, kt)</label>
+                    <input type="number" id="windWS" min="0" step="1" value="0" oninput="solveAll()">
+                </div>
+            </div>
+
+            <div id="wind-12z-fields" class="hidden-block">
+                <div class="grid">
+                    <div class="field">
+                        <label>Current 12z Wind Reading</label>
+                        <input type="number" id="wind12Current" step="1" placeholder="Last digit decimal" oninput="solveAll()">
+                        <div class="hint" id="hint-wind12Current">--</div>
+                    </div>
+                    <div class="field">
+                        <label>Previous 03z Wind Reading</label>
+                        <input type="number" id="wind03Previous" step="1" placeholder="Last digit decimal" oninput="solveAll()">
+                        <div class="hint" id="hint-wind03Previous">--</div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="wind-03z-fields" class="hidden-block">
+                <div class="grid">
+                    <div class="field">
+                        <label>Current 03z Wind Reading</label>
+                        <input type="number" id="wind03Current" step="1" placeholder="Last digit decimal" oninput="solveAll()">
+                        <div class="hint" id="hint-wind03Current">--</div>
+                    </div>
+                    <div class="field">
+                        <label>Previous 03z Wind Reading</label>
+                        <input type="number" id="wind03PreviousFor03" step="1" placeholder="Last digit decimal" oninput="solveAll()">
+                        <div class="hint" id="hint-wind03PreviousFor03">--</div>
+                    </div>
+                </div>
+                <div class="field">
+                    <label>Previous 12z Wind Reading</label>
+                    <input type="number" id="wind12Previous" step="1" placeholder="Last digit decimal" oninput="solveAll()">
+                    <div class="hint" id="hint-wind12Previous">--</div>
+                </div>
+            </div>
+
+            <div class="results-card" id="wind-avg-card">
+                <div class="res-row" id="wind-row-day"><span>0830-1730 (KM/KT):</span> <span class="val" id="res-wind-day">--</span></div>
+                <div class="res-row" id="wind-row-night"><span>1730-0830 (KM/KT):</span> <span class="val" id="res-wind-night">--</span></div>
+                <div class="res-row" id="wind-row-24h"><span>0830-0830 (KM/KT):</span> <span class="val" id="res-wind-24h">--</span></div>
+            </div>
+        </div>
+
+        <div class="section-container">
+            <div class="section-title">Visibility Section</div>
+            <div class="field">
+                <label>Visibility (meters)</label>
+                <input type="number" id="visibilityMeters" min="0" step="1" value="2000" oninput="solveAll()">
+            </div>
+            <div class="results-card">
+                <div class="res-row"><span>VV code:</span> <span class="val" id="res-vv">--</span></div>
+            </div>
+        </div>
+
+        <div class="section-container">
+            <div class="section-title">Cloud Section</div>
+            <div class="grid">
+                <div class="field">
+                    <label>Cl (Low cloud form)</label>
+                    <select id="cloudCl" onchange="solveAll()"></select>
+                </div>
+                <div class="field">
+                    <label>Nl (Low amount)</label>
+                    <input type="number" id="cloudNl" min="0" max="8" step="1" value="0" oninput="solveAll()">
+                </div>
+            </div>
+            <div class="grid">
+                <div class="field">
+                    <label>Cm (Mid cloud form)</label>
+                    <select id="cloudCm" onchange="solveAll()"></select>
+                </div>
+                <div class="field">
+                    <label>Nm (Mid amount)</label>
+                    <input type="number" id="cloudNm" min="0" max="8" step="1" value="0" oninput="solveAll()">
+                </div>
+            </div>
+            <div class="grid">
+                <div class="field">
+                    <label>Ch (High cloud form)</label>
+                    <select id="cloudCh" onchange="solveAll()"></select>
+                </div>
+                <div class="field">
+                    <label>Nh (High amount)</label>
+                    <input type="number" id="cloudNh" min="0" max="8" step="1" value="0" oninput="solveAll()">
+                </div>
+            </div>
+            <div class="grid">
+                <div class="field">
+                    <label>Nc (Total cloud amount)</label>
+                    <input type="number" id="cloudNc" min="0" max="8" step="1" value="0" oninput="solveAll()">
+                </div>
+                <div class="field">
+                    <label>Hc (lowest layer height)</label>
+                    <select id="cloudHc" onchange="solveAll()"></select>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-container">
+            <div class="section-title">Rain Section</div>
+            <div class="grid">
+                <div class="field">
+                    <label>R since last obs</label>
+                    <input type="number" id="rainR" step="1" placeholder="Last digit decimal" oninput="solveAll()">
+                    <div class="hint" id="hint-rainR">--</div>
+                </div>
+                <div class="field">
+                    <label>Rtot total rain</label>
+                    <input type="number" id="rainRtot" step="1" placeholder="Last digit decimal" oninput="solveAll()">
+                    <div class="hint" id="hint-rainRtot">--</div>
+                </div>
+            </div>
+
+            <div id="rain-03z-extra" class="hidden-block">
+                <div class="field">
+                    <label>SRF (seasonal rainfall)</label>
+                    <input type="number" id="rainSRF" step="0.1" oninput="solveAll()">
+                </div>
+            </div>
+        </div>
+
+        <div class="section-container">
+            <div class="section-title">Significant Weather</div>
+            <div class="field">
+                <label>WW Significant weather</label>
+                <select id="weatherWW" onchange="solveAll()"></select>
+            </div>
+            <div id="past-weather-fields" class="grid hidden-block">
+                <div class="field">
+                    <label>W1 (Past weather)</label>
+                    <select id="weatherW1" onchange="solveAll()"></select>
+                </div>
+                <div class="field">
+                    <label>W2 (Past weather)</label>
+                    <select id="weatherW2" onchange="solveAll()"></select>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-container">
+            <div class="section-title">SYNOP Output</div>
+            <div class="results-card">
+                <pre id="synopOutput">--</pre>
+            </div>
+        </div>
+
+        <button class="btn-primary" onclick="copyAll()">Copy SYNOP</button>
     </div>
     <script src="data.js"></script>
     <script src="logic.js"></script>

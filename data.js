@@ -106,3 +106,174 @@ const dryBulbTable = {
     "46.1-47.0": [51.9, 52.0, 52.1, 52.2, 52.3, 52.4, 52.5, 52.6, 52.8, 52.9, 53.0, 52.9, 53.1, 53.2, 53.3, 53.4, 53.5, 53.6, 53.7, 53.8, 53.9],
     "47.1-48.0": [51.7, 51.8, 52.0, 52.1, 52.2, 52.3, 52.4, 52.5, 52.7, 52.8, 52.9, 52.7, 52.8, 52.9, 53.1, 53.2, 53.3, 53.4, 53.5, 53.6, 53.7]
 };
+const windDirectionOptions = [
+    { code: '00', label: 'Calm' },
+    { code: '02', label: 'NNE' },
+    { code: '05', label: 'NE' },
+    { code: '07', label: 'ENE' },
+    { code: '09', label: 'E' },
+    { code: '11', label: 'ESE' },
+    { code: '14', label: 'SE' },
+    { code: '16', label: 'SSE' },
+    { code: '18', label: 'S' },
+    { code: '20', label: 'SSW' },
+    { code: '23', label: 'SW' },
+    { code: '25', label: 'WSW' },
+    { code: '27', label: 'W' },
+    { code: '29', label: 'WNW' },
+    { code: '32', label: 'NW' },
+    { code: '34', label: 'NNW' },
+    { code: '36', label: 'N' },
+    { code: '99', label: 'Variable' }
+];
+
+const cloudHeightOptions = [
+    { code: '0', label: '0-49 m' },
+    { code: '1', label: '50-99 m' },
+    { code: '2', label: '100-199 m' },
+    { code: '3', label: '200-299 m' },
+    { code: '4', label: '300-599 m' },
+    { code: '5', label: '600-999 m' },
+    { code: '6', label: '1000-1499 m' },
+    { code: '7', label: '1500-1999 m' },
+    { code: '8', label: '2000-2500 m' },
+    { code: '9', label: 'No cloud below 2500 m' },
+    { code: '/', label: 'Cloud base unknown/mountain station case' }
+];
+
+const cloudChOptions = [
+    { code: '0', label: 'No high cloud' },
+    { code: '1', label: 'Cirrus' }
+];
+
+const cloudCmOptions = [
+    { code: '0', label: 'No mid cloud' },
+    { code: '1', label: 'Semi transparent altostratus' },
+    { code: '2', label: 'Fully dense altostratus' },
+    { code: '3', label: 'Altocumulus' }
+];
+
+const cloudClOptions = [
+    { code: '0', label: 'No low cloud' },
+    { code: '1', label: 'Normal cumulus' },
+    { code: '2', label: 'Cumulus of vertical extent' },
+    { code: '3', label: 'Cb without anvil' },
+    { code: '4', label: 'Sc and Cu at same level' },
+    { code: '5', label: 'Stratocumulus' },
+    { code: '6', label: 'Normal stratus' },
+    { code: '7', label: 'Stratus of bad weather' },
+    { code: '8', label: 'Sc and Cu at different height' },
+    { code: '9', label: 'Cb in form of anvil' }
+];
+
+const significantWeatherOptions = [
+    { code: '00', label: 'No weather' },
+    { code: '05', label: 'Haze' },
+    { code: '06', label: 'Suspended dust' },
+    { code: '07', label: 'Blowing dust' },
+    { code: '10', label: 'Mist' },
+    { code: '13', label: 'Lightning' },
+    { code: '17', label: 'Thunder' },
+    { code: '44', label: 'Fog sky visible' },
+    { code: '45', label: 'Fog sky not visible' },
+    { code: '50', label: 'Drizzle' },
+    { code: '60', label: 'Rain' },
+    { code: '95', label: 'Thunder with rain' }
+];
+
+const pastWeatherOptions = [
+    { code: '0', label: 'Cloud covering 1/2 or less throughout period' },
+    { code: '1', label: 'Cloud >1/2 during part and <=1/2 during part' },
+    { code: '2', label: 'Cloud covering >1/2 throughout period' },
+    { code: '3', label: 'Sandstorm, duststorm or blowing snow' },
+    { code: '4', label: 'Fog/ice fog/thick haze' },
+    { code: '5', label: 'Drizzle' },
+    { code: '6', label: 'Rain' },
+    { code: '7', label: 'Snow, or rain and snow mixed' },
+    { code: '8', label: 'Showers' },
+    { code: '9', label: 'Thunderstorm(s) with or without precipitation' }
+];
+
+const windKt0830to1730 = [
+    { from: 0.0, to: 8.2, value: 0 }, { from: 8.3, to: 25.0, value: 1 }, { from: 25.1, to: 41.6, value: 2 },
+    { from: 41.7, to: 58.3, value: 3 }, { from: 58.4, to: 75.0, value: 4 }, { from: 75.1, to: 91.7, value: 5 },
+    { from: 91.8, to: 108.3, value: 6 }, { from: 108.4, to: 125.0, value: 7 }, { from: 125.1, to: 141.7, value: 8 },
+    { from: 141.8, to: 158.4, value: 9 }, { from: 158.5, to: 175.0, value: 10 }, { from: 175.1, to: 191.8, value: 11 },
+    { from: 191.9, to: 208.4, value: 12 }, { from: 208.5, to: 225.1, value: 13 }, { from: 225.2, to: 241.7, value: 14 },
+    { from: 241.8, to: 258.5, value: 15 }, { from: 258.6, to: 275.1, value: 16 }, { from: 275.2, to: 291.8, value: 17 },
+    { from: 291.9, to: 308.5, value: 18 }, { from: 308.6, to: 325.2, value: 19 }, { from: 325.3, to: 341.8, value: 20 },
+    { from: 341.9, to: 358.6, value: 21 }, { from: 358.7, to: 375.2, value: 22 }, { from: 375.3, to: 391.9, value: 23 },
+    { from: 392.0, to: 408.5, value: 24 }, { from: 408.6, to: 425.3, value: 25 }, { from: 425.4, to: 441.9, value: 26 },
+    { from: 442.0, to: 458.6, value: 27 }, { from: 458.7, to: 475.3, value: 28 }, { from: 475.4, to: 492.0, value: 29 },
+    { from: 492.1, to: 508.6, value: 30 }, { from: 508.7, to: 525.4, value: 31 }, { from: 525.5, to: 542.0, value: 32 },
+    { from: 542.1, to: 558.7, value: 33 }, { from: 558.8, to: 575.3, value: 34 }
+];
+
+const windKt1730prevTo0830 = [
+    { from: 0.0, to: 13.8, value: 0 }, { from: 13.9, to: 41.6, value: 1 }, { from: 41.7, to: 69.4, value: 2 },
+    { from: 69.5, to: 97.2, value: 3 }, { from: 97.3, to: 125.0, value: 4 }, { from: 125.1, to: 152.8, value: 5 },
+    { from: 152.9, to: 180.6, value: 6 }, { from: 180.7, to: 208.4, value: 7 }, { from: 208.5, to: 236.2, value: 8 },
+    { from: 236.3, to: 264.0, value: 9 }, { from: 264.1, to: 291.8, value: 10 }, { from: 291.9, to: 319.6, value: 11 },
+    { from: 319.7, to: 347.4, value: 12 }, { from: 347.5, to: 375.2, value: 13 }, { from: 375.3, to: 403.0, value: 14 },
+    { from: 403.1, to: 430.8, value: 15 }, { from: 430.9, to: 458.6, value: 16 }, { from: 458.7, to: 486.4, value: 17 },
+    { from: 486.5, to: 514.2, value: 18 }, { from: 514.3, to: 542.0, value: 19 }, { from: 542.1, to: 569.8, value: 20 },
+    { from: 569.9, to: 597.6, value: 21 }, { from: 597.7, to: 625.4, value: 22 }, { from: 625.5, to: 653.2, value: 23 },
+    { from: 653.3, to: 681.0, value: 24 }, { from: 681.1, to: 708.8, value: 25 }, { from: 708.9, to: 736.6, value: 26 },
+    { from: 736.7, to: 764.4, value: 27 }, { from: 764.5, to: 792.2, value: 28 }, { from: 792.3, to: 820.0, value: 29 },
+    { from: 820.1, to: 847.8, value: 30 }, { from: 847.9, to: 875.6, value: 31 }, { from: 875.7, to: 903.4, value: 32 },
+    { from: 903.5, to: 931.2, value: 33 }, { from: 931.3, to: 959.0, value: 34 }
+];
+
+const windKt0830prevTo0830 = [
+    { from: 0.0, to: 22.1, value: 0 }, { from: 22.2, to: 66.7, value: 1 }, { from: 66.8, to: 111.1, value: 2 },
+    { from: 111.2, to: 155.6, value: 3 }, { from: 155.7, to: 200.1, value: 4 }, { from: 200.2, to: 244.6, value: 5 },
+    { from: 244.7, to: 289.0, value: 6 }, { from: 289.1, to: 333.5, value: 7 }, { from: 333.6, to: 378.0, value: 8 },
+    { from: 378.1, to: 422.5, value: 9 }, { from: 422.6, to: 466.9, value: 10 }, { from: 467.0, to: 511.4, value: 11 },
+    { from: 511.5, to: 555.9, value: 12 }, { from: 556.0, to: 600.4, value: 13 }, { from: 600.5, to: 644.8, value: 14 },
+    { from: 644.9, to: 689.4, value: 15 }, { from: 689.5, to: 733.3, value: 16 }, { from: 733.4, to: 778.3, value: 17 },
+    { from: 778.4, to: 822.7, value: 18 }, { from: 822.8, to: 867.3, value: 19 }, { from: 867.4, to: 911.7, value: 20 },
+    { from: 911.8, to: 956.2, value: 21 }, { from: 956.3, to: 1000.7, value: 22 }, { from: 1000.8, to: 1045.2, value: 23 },
+    { from: 1045.3, to: 1089.6, value: 24 }, { from: 1089.7, to: 1134.1, value: 25 }, { from: 1134.2, to: 1178.6, value: 26 },
+    { from: 1178.7, to: 1223.1, value: 27 }, { from: 1223.2, to: 1267.5, value: 28 }, { from: 1267.6, to: 1312.1, value: 29 },
+    { from: 1312.2, to: 1356.5, value: 30 }, { from: 1356.6, to: 1401.0, value: 31 }, { from: 1401.1, to: 1445.4, value: 32 },
+    { from: 1445.5, to: 1490.0, value: 33 }, { from: 1490.1, to: 1534.4, value: 34 }
+];
+
+const windKmph0830to1730 = [
+    { from: 0.0, to: 4.4, value: 0 }, { from: 4.5, to: 13.5, value: 1 }, { from: 13.6, to: 22.4, value: 2 },
+    { from: 22.5, to: 31.5, value: 3 }, { from: 31.6, to: 40.4, value: 4 }, { from: 40.5, to: 49.5, value: 5 },
+    { from: 49.6, to: 58.4, value: 6 }, { from: 58.5, to: 67.5, value: 7 }, { from: 67.6, to: 76.4, value: 8 },
+    { from: 76.5, to: 85.5, value: 9 }, { from: 85.6, to: 94.4, value: 10 }, { from: 94.5, to: 103.5, value: 11 },
+    { from: 103.6, to: 112.4, value: 12 }, { from: 112.5, to: 121.5, value: 13 }, { from: 121.6, to: 130.4, value: 14 },
+    { from: 130.5, to: 139.5, value: 15 }, { from: 139.6, to: 148.4, value: 16 }, { from: 148.5, to: 157.5, value: 17 },
+    { from: 157.6, to: 166.4, value: 18 }, { from: 166.5, to: 175.5, value: 19 }, { from: 175.6, to: 184.4, value: 20 },
+    { from: 184.5, to: 193.5, value: 21 }, { from: 193.6, to: 202.4, value: 22 }, { from: 202.5, to: 211.5, value: 23 },
+    { from: 211.6, to: 220.4, value: 24 }, { from: 220.5, to: 229.5, value: 25 }, { from: 229.6, to: 238.4, value: 26 },
+    { from: 238.5, to: 247.5, value: 27 }, { from: 247.6, to: 256.4, value: 28 }, { from: 256.5, to: 265.5, value: 29 }
+];
+
+const windKmph1730prevTo0830 = [
+    { from: 0.0, to: 7.4, value: 0 }, { from: 7.5, to: 22.5, value: 1 }, { from: 22.6, to: 37.4, value: 2 },
+    { from: 37.5, to: 52.5, value: 3 }, { from: 52.6, to: 67.4, value: 4 }, { from: 67.5, to: 82.5, value: 5 },
+    { from: 82.6, to: 97.4, value: 6 }, { from: 97.5, to: 112.5, value: 7 }, { from: 112.6, to: 127.4, value: 8 },
+    { from: 127.5, to: 142.5, value: 9 }, { from: 142.6, to: 157.4, value: 10 }, { from: 157.5, to: 172.5, value: 11 },
+    { from: 172.6, to: 187.4, value: 12 }, { from: 187.5, to: 202.5, value: 13 }, { from: 202.6, to: 217.4, value: 14 },
+    { from: 217.5, to: 232.5, value: 15 }, { from: 232.6, to: 247.4, value: 16 }, { from: 247.5, to: 262.5, value: 17 },
+    { from: 262.6, to: 277.4, value: 18 }, { from: 277.5, to: 292.5, value: 19 }, { from: 292.6, to: 307.4, value: 20 },
+    { from: 307.5, to: 322.5, value: 21 }, { from: 322.6, to: 337.4, value: 22 }, { from: 337.5, to: 352.5, value: 23 },
+    { from: 352.6, to: 367.4, value: 24 }, { from: 367.5, to: 382.5, value: 25 }, { from: 382.6, to: 397.4, value: 26 },
+    { from: 397.5, to: 412.5, value: 27 }, { from: 412.6, to: 427.4, value: 28 }, { from: 427.5, to: 442.5, value: 29 }
+];
+
+const windKmph0830prevTo0830 = [
+    { from: 0.0, to: 11.9, value: 0 }, { from: 12.0, to: 36.0, value: 1 }, { from: 36.1, to: 59.9, value: 2 },
+    { from: 60.0, to: 84.0, value: 3 }, { from: 84.1, to: 107.9, value: 4 }, { from: 108.0, to: 132.0, value: 5 },
+    { from: 132.1, to: 155.9, value: 6 }, { from: 156.0, to: 180.0, value: 7 }, { from: 180.1, to: 203.9, value: 8 },
+    { from: 204.0, to: 228.0, value: 9 }, { from: 228.1, to: 251.9, value: 10 }, { from: 252.0, to: 276.0, value: 11 },
+    { from: 276.1, to: 299.9, value: 12 }, { from: 300.0, to: 324.0, value: 13 }, { from: 324.1, to: 347.9, value: 14 },
+    { from: 348.0, to: 372.0, value: 15 }, { from: 372.1, to: 395.9, value: 16 }, { from: 396.0, to: 420.0, value: 17 },
+    { from: 420.1, to: 443.9, value: 18 }, { from: 444.0, to: 468.0, value: 19 }, { from: 468.1, to: 491.9, value: 20 },
+    { from: 492.0, to: 516.0, value: 21 }, { from: 516.1, to: 539.9, value: 22 }, { from: 540.0, to: 564.0, value: 23 },
+    { from: 564.1, to: 587.9, value: 24 }, { from: 588.0, to: 612.0, value: 25 }, { from: 612.1, to: 635.9, value: 26 },
+    { from: 636.0, to: 660.0, value: 27 }, { from: 660.1, to: 683.9, value: 28 }, { from: 684.0, to: 708.0, value: 29 }
+];
