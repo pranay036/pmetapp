@@ -1,0 +1,43 @@
+{
+  "name": "synop-creator-desktop",
+  "version": "1.0.0",
+  "private": true,
+  "description": "SYNOP creator desktop wrapper",
+  "main": "desktop/main.js",
+  "scripts": {
+    "desktop": "electron .",
+    "desktop:dist:win": "electron-builder --win nsis portable"
+  },
+  "devDependencies": {
+    "electron": "^33.2.1",
+    "electron-builder": "^25.1.8"
+  },
+  "build": {
+    "appId": "com.pranay.synopcreator",
+    "productName": "SYNOP Creator",
+    "asar": true,
+    "compression": "maximum",
+    "files": [
+      "desktop/**",
+      "index.html",
+      "style.css",
+      "desktop.css",
+      "logic.js",
+      "data.js",
+      "manifest.json",
+      "res/**"
+    ],
+    "win": {
+      "target": [
+        "nsis",
+        "portable"
+      ],
+      "artifactName": "SYNOP-Creator-${version}-${arch}.${ext}"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true
+    }
+  }
+}

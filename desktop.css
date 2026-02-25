@@ -1,0 +1,53 @@
+body.desktop-shell {
+  display: block;
+  padding: 24px;
+}
+
+body.desktop-shell .app-container {
+  max-width: none;
+  width: min(1600px, 96vw);
+  margin: 0 auto;
+  border-radius: 18px;
+  padding: 22px 24px 10px;
+}
+
+body.desktop-shell .section-container {
+  margin-bottom: 16px;
+}
+
+body.desktop-shell .section-title {
+  margin-bottom: 10px;
+}
+
+body.desktop-shell .grid {
+  gap: 14px;
+}
+
+body.desktop-shell .field {
+  margin-bottom: 10px;
+}
+
+body.desktop-shell input,
+body.desktop-shell select,
+body.desktop-shell textarea {
+  font-size: 0.95rem;
+  padding: 10px 12px;
+}
+
+body.desktop-shell .results-card {
+  padding: 12px 14px;
+}
+
+body.desktop-shell .res-row {
+  margin-bottom: 6px;
+}
+
+body.desktop-shell #synopOutput {
+  font-size: 0.88rem;
+}
+
+body.desktop-shell .btn-primary {
+  width: 280px;
+  margin: 8px 0 14px auto;
+  display: block;
+}

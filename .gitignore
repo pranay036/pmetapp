@@ -1,1 +1,4 @@
 res/chat history.txt
+node_modules/
+dist/
+*.log

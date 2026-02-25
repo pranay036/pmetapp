@@ -6,6 +6,22 @@
     <title>SYNOP Creator</title>
     <link rel="manifest" href="manifest.json">
     <link rel="stylesheet" href="style.css">
+    <script>
+        (function () {
+            var params = new URLSearchParams(window.location.search);
+            var forceDesktop = params.get('desktop') === '1';
+            var ua = (navigator.userAgent || '').toLowerCase();
+            var isMobileUA = /android|iphone|ipod|windows phone|mobile|blackberry|opera mini/.test(ua);
+            var isTabletUA = /ipad|tablet/.test(ua);
+            var narrowScreen = window.matchMedia('(max-width: 900px)').matches;
+            var useDesktopCss = forceDesktop || (!isMobileUA && !isTabletUA && !narrowScreen);
+
+            if (useDesktopCss) {
+                document.documentElement.classList.add('desktop-shell');
+                window.__DESKTOP_LAYOUT__ = true;
+            }
+        })();
+    </script>
 </head>
 <body data-theme="light">
     <div class="app-container">
@@ -265,6 +281,17 @@
 
         <button class="btn-primary" onclick="copyAll()">Copy SYNOP</button>
     </div>
+    <script>
+        (function () {
+            if (window.__DESKTOP_LAYOUT__) {
+                document.body.classList.add('desktop-shell');
+                var link = document.createElement('link');
+                link.rel = 'stylesheet';
+                link.href = 'desktop.css';
+                document.head.appendChild(link);
+            }
+        })();
+    </script>
     <script src="data.js"></script>
     <script src="logic.js"></script>
 </body>
